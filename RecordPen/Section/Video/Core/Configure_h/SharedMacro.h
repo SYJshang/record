@@ -27,8 +27,8 @@
 
 // 屏幕尺寸
 #define SCREEN_SIZE         [UIScreen mainScreen].bounds.size
-#define SCREEN_WIDTH        SCREEN_SIZE.width
-#define SCREEN_HEIGHT       SCREEN_SIZE.height
+//#define SCREEN_WIDTH        SCREEN_SIZE.width
+//#define SCREEN_HEIGHT       SCREEN_SIZE.height
 
 //suppress warnning
 #define CCSuppressPerformSelectorLeakWarning(Stuff) \

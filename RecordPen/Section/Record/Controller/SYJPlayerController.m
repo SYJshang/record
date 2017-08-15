@@ -47,7 +47,7 @@
 - (JPColorPillar *)colorpilar{
     
     if (_colorpilar == nil) {
-        _colorpilar = [[JPColorPillar alloc]initWithFrame:CGRectMake(10, 20, KSceenW - 20, KSceenW) backgroundColor:[UIColor clearColor] backgroundImage:[UIImage imageNamed:@"pillarViewBackgroundImage"] pillarWidth:10 pillarModelStyle:PillarModelStyleNomal pillarSpacingStyle:PillarSpacingStyleNext pillarWaveStyle:PillarWaveStyleElectrocardiographyToRight pillarColorStyle:PillarColorStyleSevenColorHorizontalChanging coatImage:nil coatImageAlpha:0.0];
+        _colorpilar = [[JPColorPillar alloc]initWithFrame:CGRectMake(10, 20, KSceenW - 20, KSceenW) backgroundColor:[UIColor clearColor] backgroundImage:[UIImage imageNamed:@"pillarViewBackgroundImage"] pillarWidth:1 pillarModelStyle:PillarModelStyleNomal pillarSpacingStyle:PillarSpacingStyleNext pillarWaveStyle:PillarWaveStyleElectrocardiographyToRight pillarColorStyle:PillarColorStyleSevenColorHorizontalChanging coatImage:nil coatImageAlpha:0.0];
         
         _colorpilar.hasColorTransitionEffect = YES;
     }
@@ -201,8 +201,9 @@
 //    float alt = self.colorpilar.height;
 //
     
-    float x = arc4random() % 360;
-
+    float x = (arc4random() % 340) + 40;
+    
+    
     [self.colorpilar startChangeHeightWithVerticalHeight:x andTimeInterval:self.timer.timeInterval];
     float progress = self.audioPlayer.currentTime / self.audioPlayer.duration;
     [self.proressView setProgress:progress animated:true];

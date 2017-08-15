@@ -11,6 +11,8 @@
 #import "SYJRecordView.h"
 #import "JYZRecorder.h"
 #import "SYJListController.h"
+#import "ZYTabBarController.h"
+#import "AppDelegate.h"
 
 typedef enum PlayOrPauseState {
     PlayStatePaly  = 0,
@@ -156,11 +158,21 @@ typedef enum PlayOrPauseState {
     [self.navigationController pushViewController:[SYJListController new] animated:YES];
 }
 
+- (void)back{
+    
+    AppDelegate *appleDeletae = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    [appleDeletae switchToRootVc];
+    
+}
+
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     
     self.view.backgroundColor = Gray;
+    
+    self.navigationItem.titleView = [UILabel titleWithColor:[UIColor colorWithWhite:0.5 alpha:1.0] title:@"Record" font:17.0];
+
     
     UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
     btn.frame = CGRectMake(10, 10, 40, 24);
@@ -169,6 +181,15 @@ typedef enum PlayOrPauseState {
     btn.titleLabel.font = [UIFont systemFontOfSize:16.0];
     [btn addTarget:self action:@selector(btnClick) forControlEvents:UIControlEventTouchUpInside];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:btn];
+    
+    
+    UIButton *btn1 = [UIButton buttonWithType:UIButtonTypeCustom];
+    btn1.frame = CGRectMake(10, 10, 40, 40);
+    [btn1 setImage:[UIImage imageNamed:@"取消"] forState:UIControlStateNormal];
+    [btn1 setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    btn1.titleLabel.font = [UIFont systemFontOfSize:16.0];
+    [btn1 addTarget:self action:@selector(back) forControlEvents:UIControlEventTouchUpInside];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:btn1];
     
     [self.view addSubview:self.scrollView];
     [self setScrollView];
@@ -197,20 +218,21 @@ typedef enum PlayOrPauseState {
     [self.playBtn setImage:[UIImage imageNamed:@"pause"] forState:UIControlStateNormal];
     self.playBtn.selected = NO;
     [self.playBtn addTarget:self action:@selector(playOrPause:) forControlEvents:UIControlEventTouchUpInside];
-    self.playBtn.sd_layout.centerXEqualToView(self.view).topSpaceToView(self.scrollView, 10).heightIs(180 * KSceenWScale).widthIs(180 * KSceenWScale);
+    self.playBtn.sd_layout.centerXEqualToView(self.view).topSpaceToView(self.scrollView, 30).heightIs(120 * KSceenWScale).widthIs(120 * KSceenWScale);
     
     self.pauseBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.view addSubview:self.pauseBtn];
-    [self.pauseBtn setImage:[UIImage imageNamed:@"暂停"] forState:UIControlStateNormal];
+    [self.pauseBtn setTitle:@"Stop" forState:UIControlStateNormal];
+    [self.pauseBtn  setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [self.pauseBtn addTarget:self action:@selector(stopRecord:) forControlEvents:UIControlEventTouchUpInside];
-    self.pauseBtn.sd_layout.leftSpaceToView(self.view, 20).centerYEqualToView(self.playBtn).heightIs(90 * KSceenWScale).widthIs(90 * KSceenWScale);
+    self.pauseBtn.sd_layout.rightSpaceToView(self.playBtn, 10).centerYEqualToView(self.playBtn).heightIs(25 * KSceenWScale).widthIs(40 * KSceenWScale);
     
     self.saveBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.view addSubview:self.saveBtn];
-    [self.saveBtn setImage:[UIImage imageNamed:@"保存"] forState:UIControlStateNormal];
-    self.saveBtn.selected = NO;
+    [self.saveBtn setTitle:@"Save" forState:UIControlStateNormal];
+    [self.saveBtn  setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];    self.saveBtn.selected = NO;
     [self.saveBtn addTarget:self action:@selector(saveFile:) forControlEvents:UIControlEventTouchUpInside];
-    self.saveBtn.sd_layout.rightSpaceToView(self.view, 20).centerYEqualToView(self.playBtn).heightIs(80 * KSceenWScale).widthIs(80 * KSceenWScale);
+    self.saveBtn.sd_layout.leftSpaceToView(self.playBtn, 10).centerYEqualToView(self.playBtn).heightIs(25 * KSceenWScale).widthIs(40 * KSceenWScale);
     
     
 }
@@ -226,7 +248,7 @@ typedef enum PlayOrPauseState {
 
     }else{
         
-        UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:@"Title" message:@"input the file name" preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:@"Title" message:@"Input the file name" preferredStyle:UIAlertControllerStyleAlert];
         [alertVC addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
             
             textField.placeholder = @"File Name";
@@ -244,12 +266,14 @@ typedef enum PlayOrPauseState {
             NSString *str = textFiled.text;
             if (!NULLString(str)) {
                
-                NSString *pathstr = [NSString stringWithFormat:@"/FilePath/%@.caf",str];
-                
-                NSString *path = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingString:pathstr];
                 NSFileManager *fileManager = [NSFileManager defaultManager];
                 
                 [fileManager createDirectoryAtPath:[[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingString:@"/FilePath"] withIntermediateDirectories:YES attributes:nil error:nil];
+                
+                NSString *pathstr = [NSString stringWithFormat:@"/FilePath/%@.caf",str];
+                
+                NSString *path = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingString:pathstr];
+                
                 
                 
                 if (![fileManager fileExistsAtPath:path]) {
@@ -287,9 +311,7 @@ typedef enum PlayOrPauseState {
         
     [SVProgressHUD showInfoWithStatus:@"Start the recording!"];
     
-    [self.playBtn setImage:[UIImage imageNamed:@"麦克风"] forState:UIControlStateNormal];
-    [self.pauseBtn setImage:[UIImage imageNamed:@"暂停"] forState:UIControlStateNormal];
-
+    [self.playBtn setImage:[UIImage imageNamed:@"暂停"] forState:UIControlStateNormal];
     self.recorder.recordName = [NSString stringWithFormat:@"/%.0f.caf", [[NSDate date] timeIntervalSince1970] * 1000];
  
     [self.recorder startRecorder];
@@ -357,7 +379,7 @@ typedef enum PlayOrPauseState {
         [SVProgressHUD showInfoWithStatus:@"Stop the recording!"];
 
         
-        [self.pauseBtn setImage:[UIImage imageNamed:@"播放"] forState:UIControlStateNormal];
+//        [self.pauseBtn setImage:[UIImage imageNamed:@"播放"] forState:UIControlStateNormal];
         [self.playBtn setImage:[UIImage imageNamed:@"pause"] forState:UIControlStateNormal];
 
         [self.recorder stopRecorder];
@@ -377,58 +399,58 @@ typedef enum PlayOrPauseState {
 
 
 -(void)addSubViews{
-    for (int i = 0; i <7; i++) {
-        UILabel * label = [UILabel new];
-        label.frame= CGRectMake(self.view.frame.size.width - 25 , 241+i*24, 20, 10);
-        label.textAlignment = 2;
-        if (i==0) {
-            label.text = [NSString stringWithFormat:@"-10"];
-        }
-        if (i==1) {
-            label.text = [NSString stringWithFormat:@"-7"];
-        }if (i==2) {
-            label.text = [NSString stringWithFormat:@"-5"];
-        }if (i==3) {
-            label.text = [NSString stringWithFormat:@"-3"];
-        }if (i==4) {
-            label.text = [NSString stringWithFormat:@"-2"];
-        }if (i==5) {
-            label.text = [NSString stringWithFormat:@"-1"];
-        }if (i==6) {
-            label.text = [NSString stringWithFormat:@"0"];
-        }
-        
-        label.font = [UIFont systemFontOfSize:10];
-        label.textColor = [UIColor whiteColor];
-        [self.view addSubview:label];
-    }
-    for (int i = 0; i <7; i++) {
-        UILabel * label = [UILabel new];
-        label.frame= CGRectMake(self.view.frame.size.width - 25 , 221-i*24, 20, 10);
-        label.textAlignment = 2;
-        if (i==0) {
-            label.text = [NSString stringWithFormat:@"-10"];
-        }
-        if (i==1) {
-            label.text = [NSString stringWithFormat:@"-7"];
-        }if (i==2) {
-            label.text = [NSString stringWithFormat:@"-5"];
-        }if (i==3) {
-            label.text = [NSString stringWithFormat:@"-3"];
-        }if (i==4) {
-            label.text = [NSString stringWithFormat:@"-2"];
-        }if (i==5) {
-            label.text = [NSString stringWithFormat:@"-1"];
-        }if (i==6) {
-            label.text = [NSString stringWithFormat:@"0"];
-        }
-        
-        label.font = [UIFont systemFontOfSize:10];
-        label.textColor = [UIColor whiteColor];
-        [self.view addSubview:label];
-        self.scrollBtn.frame = CGRectMake(10+self.scrollView.frame.origin.x, self.scrollView.frame.origin.y+32, 1, self.scrollView.frame.size.height-32);
-    }
-    
+//    for (int i = 0; i <7; i++) {
+//        UILabel * label = [UILabel new];
+//        label.frame= CGRectMake(self.view.frame.size.width - 25 , 241+i*24, 20, 10);
+//        label.textAlignment = 2;
+//        if (i==0) {
+//            label.text = [NSString stringWithFormat:@"-10"];
+//        }
+//        if (i==1) {
+//            label.text = [NSString stringWithFormat:@"-7"];
+//        }if (i==2) {
+//            label.text = [NSString stringWithFormat:@"-5"];
+//        }if (i==3) {
+//            label.text = [NSString stringWithFormat:@"-3"];
+//        }if (i==4) {
+//            label.text = [NSString stringWithFormat:@"-2"];
+//        }if (i==5) {
+//            label.text = [NSString stringWithFormat:@"-1"];
+//        }if (i==6) {
+//            label.text = [NSString stringWithFormat:@"0"];
+//        }
+//        
+//        label.font = [UIFont systemFontOfSize:10];
+//        label.textColor = [UIColor whiteColor];
+//        [self.view addSubview:label];
+//    }
+//    for (int i = 0; i <7; i++) {
+//        UILabel * label = [UILabel new];
+//        label.frame= CGRectMake(self.view.frame.size.width - 25 , 221-i*24, 20, 10);
+//        label.textAlignment = 2;
+//        if (i==0) {
+//            label.text = [NSString stringWithFormat:@"-10"];
+//        }
+//        if (i==1) {
+//            label.text = [NSString stringWithFormat:@"-7"];
+//        }if (i==2) {
+//            label.text = [NSString stringWithFormat:@"-5"];
+//        }if (i==3) {
+//            label.text = [NSString stringWithFormat:@"-3"];
+//        }if (i==4) {
+//            label.text = [NSString stringWithFormat:@"-2"];
+//        }if (i==5) {
+//            label.text = [NSString stringWithFormat:@"-1"];
+//        }if (i==6) {
+//            label.text = [NSString stringWithFormat:@"0"];
+//        }
+//        
+//        label.font = [UIFont systemFontOfSize:10];
+//        label.textColor = [UIColor whiteColor];
+//        [self.view addSubview:label];
+//        self.scrollBtn.frame = CGRectMake(10+self.scrollView.frame.origin.x, self.scrollView.frame.origin.y+32, 1, self.scrollView.frame.size.height-32);
+//    }
+//    
     
 }
 

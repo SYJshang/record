@@ -32,6 +32,15 @@
 #import "YTKKeyValueStore.h"
 
 
+//#define kIsLogin                  @"kIsLogin"
+#define kIsOpenTouchID            @"kIsOpenTouchID"
+#define kIsOpenUnlockedGesture    @"kIsOpenUnlockedGesture"
+
+#define kLastEnterBackgroundDate  @"kLastEnterBackgroundDate"
+
+#define kUserDefaults [NSUserDefaults standardUserDefaults]
+
+#import "UIAlertController+Blocks.h"
 
 
 //屏幕适配

@@ -19,6 +19,7 @@
 #import "ATCommonCellModel.h"
 
 #import "SMDaoFactory.h"
+#import "AppDelegate.h"
 
 @interface SMNoteFolderController () <ATTableViewAdapterDelegate>
 {
@@ -43,9 +44,25 @@
     return _interactor;
 }
 
+- (void)back{
+    
+    AppDelegate *appleDeletae = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    [appleDeletae switchToRootVc];
+    
+}
+
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.navigationItem.titleView = [UILabel titleWithColor:[UIColor whiteColor] title:@"Note" font:17.0];
+    
+    UIButton *btn1 = [UIButton buttonWithType:UIButtonTypeCustom];
+    btn1.frame = CGRectMake(10, 10, 40, 40);
+    [btn1 setImage:[UIImage imageNamed:@"取消"] forState:UIControlStateNormal];
+    [btn1 setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    btn1.titleLabel.font = [UIFont systemFontOfSize:16.0];
+    [btn1 addTarget:self action:@selector(back) forControlEvents:UIControlEventTouchUpInside];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:btn1];
     
     self.bottomView = [[SMNoteFolderBottomView alloc] init];
 //    self.folderView = [[SMNoteFolderView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT - 64 - 44)];
@@ -60,7 +77,7 @@
     [self.bottomView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.mas_equalTo(self.view);
         make.height.mas_equalTo(44);
-        make.bottom.with.offset(-44);
+        make.bottom.with.offset(0);
     }];
     
     self.adapter = [[SMNoteFolderAdapter alloc] init];

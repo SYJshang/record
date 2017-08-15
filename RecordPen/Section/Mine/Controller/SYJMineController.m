@@ -13,6 +13,7 @@
 #import "SYJAboutController.h"
 #import "SYJListController.h"
 #import "SYJShareFileController.h"
+#import "SettingVC.h"
 
 @interface SYJMineController ()<UITableViewDelegate,UITableViewDataSource>
 
@@ -30,8 +31,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.arrList = @[@"The recording file",@"File sharing",@"About Us",@"Clean up the memory"];
-    self.imageArr = @[@"录音",@"导出",@"关于",@"清理"];
+    self.arrList = @[@"The recording file",@"File sharing",@"About Us",@"Clean up the memory",@"Set the password"];
+    self.imageArr = @[@"录音",@"导出",@"关于",@"清理",@"密码"];
     
     [self setTableView];
     
@@ -100,9 +101,16 @@
             
             float cache = [YJCache filePath];
             NSString *str = [NSString stringWithFormat:@"清理了%.2f Mb 缓存",cache];
+            [YJCache clearFile];
             [SVProgressHUD showInfoWithStatus:str];
         }
+            break;
+        case 4:{
             
+            [self.navigationController pushViewController:[SettingVC new] animated:YES];
+            
+            
+        }
             break;
             
         default:

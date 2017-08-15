@@ -27,6 +27,10 @@
 	</dict>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Will this App be allowed to use your microphone</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Whether to allow access to album rights</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Whether to allow access to camera</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIRequiredDeviceCapabilities</key>

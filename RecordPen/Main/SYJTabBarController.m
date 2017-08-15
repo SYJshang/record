@@ -13,6 +13,7 @@
 #import "SYJVideoController.h"
 #import "SYJMineController.h"
 #import "SMNoteFolderController.h"
+#import "SYJDrawController.h"
 
 
 
@@ -27,7 +28,7 @@
     
     
     //
-    SYJRecordController *main = [[SYJRecordController alloc]init] ;
+    SYJDrawController *main = [[SYJDrawController alloc]init] ;
     //    main.view.backgroundColor = [UIColor redColor];
     [self addChildVc:main Title:@"Recode" withTitleSize:12.0 andFoneName:@"HelveticaNeue-Bold" selectedImage:@"录音s" withTitleColor:TextColor unselectedImage:@"录音1" withTitleColor:[UIColor lightGrayColor]];
     //

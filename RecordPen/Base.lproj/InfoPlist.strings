@@ -1,0 +1,10 @@
+/* 
+  InfoPlist.strings
+  RecordPen
+
+  Created by 尚勇杰 on 2017/8/10.
+  Copyright © 2017年 尚勇杰. All rights reserved.
+*/
+
+CFBundleDisplayName="RecordPen";
+CFBundleName="RecordPen";
